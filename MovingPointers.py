@@ -4,22 +4,23 @@ import astral
 import astral.geocoder
 import astral.sun
 
+
 class MovingPointers:
 
-    def __init__(self, time:datetime.datetime, city:astral.LocationInfo = None, nextDay:bool = False):
+    def __init__(self, time: datetime.datetime, city: astral.LocationInfo = None, nextDay: bool = False):
         self.time = time
         if city:
             self.city = city
         if nextDay is True or city:
-            self.daylight = astral.sun.sun(self.city.observer, date=self.time, tzinfo=self.time.tzinfo)
-        
+            self.daylight = astral.sun.sun(
+                self.city.observer, date=self.time, tzinfo=self.time.tzinfo)
 
     def hoursPointer(self):
         '''
             Angle in Circle for
         Hours (Small) Pointer
         '''
-        return 360 * (self.time.hour*60*60 + self.time.minute*60 + self.time.second) / 86,400
+        return 360 * (self.time.hour*60*60 + self.time.minute*60 + self.time.second) / 86, 400
 
     def minutesPointer(self):
         '''
@@ -53,7 +54,7 @@ class MovingPointers:
         --- +X° rotation to RIGHT ---
         '''
         noon = self.daylight['noon']
-        return 360 * (noon.hour*60*60 + noon.minute*60 + noon.second) / 86,400 - 180
+        return 360 * (noon.hour*60*60 + noon.minute*60 + noon.second) / 86, 400 - 180
 
     def daylightPart(self):
         '''
@@ -69,16 +70,21 @@ class MovingPointers:
         Down part bellow 2 Lower Lines is GRAY colored
         '''
         sunrise = self.daylight['sunrise']
-        HigherLeft = 360 * (sunrise.hour*60*60 + sunrise.minute*60 + sunrise.second) / 86,400
+        HigherLeft = 360 * (sunrise.hour*60*60 +
+                            sunrise.minute*60 + sunrise.second) / 86, 400
         sunset = self.daylight['sunset']
-        HigherRight = 360 * (sunset.hour*60*60 + sunset.minute*60 + sunset.second) / 86,400
+        HigherRight = 360 * (sunset.hour*60*60 +
+                             sunset.minute*60 + sunset.second) / 86, 400
 
         dawn = self.daylight['dawn']
-        LowerLeft = 360 * (dawn.hour*60*60 + dawn.minute*60 + dawn.second) / 86,400
+        LowerLeft = 360 * (dawn.hour*60*60 + dawn.minute *
+                           60 + dawn.second) / 86, 400
         dusk = self.daylight['dusk']
-        LowerRight = 360 * (dusk.hour*60*60 + dusk.minute*60 + dusk.second) / 86,400
+        LowerRight = 360 * (dusk.hour*60*60 + dusk.minute *
+                            60 + dusk.second) / 86, 400
 
-if __name__=='__main__':
+
+if __name__ == '__main__':
     now = datetime.datetime.now()
 
     print(now.weekday())
@@ -100,8 +106,8 @@ if __name__=='__main__':
 
     jsonPath = 'CLOCK/worldcities.json'
     with open(jsonPath, 'r') as file:
-        WORLD:dict = json.load(file)
-    
+        WORLD: dict = json.load(file)
+
     start = time.time_ns()
 
     continent = 'Europe'
@@ -122,7 +128,7 @@ if __name__=='__main__':
         timezone=timezone,
         latitude=lat,
         longitude=lng)
-    
+
     now = datetime.datetime.now(CITY.tzinfo)
 
     daylight = astral.sun.sun(CITY.observer, date=now, tzinfo=CITY.tzinfo)
